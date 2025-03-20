@@ -1,0 +1,36 @@
+#10秒間の地震計のデータを地震発生時(主要動)と平常時(ほぼ平坦)をそれぞれ50,50個ずつつくってそれぞれ別のファイルに格納する
+#必要なライブラリをインポーチ
+import numpy as np
+import matplotlib.pyplot as plt
+
+#地震発生時の波形データを50個作成してリストにする
+jisin_data = []
+for i in range(50):
+  #地震発生時の波形をsinを使用して生成
+  time = np.linspace(0, 10, 100)
+  ampj = np.sin(2 * np.pi * 2 * time) + np.random.normal(0, 0.2, 100)
+  jisin_data.append(ampj)
+# print(jisin_data)
+#平常時の波形データ(ほぼ平坦なノイズ)を50個作成してリストにする
+normal_data = []
+for i in range(50):
+  #ほぼ平坦な波形を小さい範囲のランダム値の振幅で生成
+  time = np.linspace(0, 10, 100)
+  amph = np.random.normal(0, 0.1, 100)
+  normal_data.append(amph)
+ #print(normal_data)
+for i in range(15):#地震発生時の波形データの確認 (最初の15個を表示)
+  plt.plot(np.linspace(0, 10, 100), jisin_data[0], label='j地震発生時')
+  plt.xlabel('Time (s)')
+  plt.ylabel('Amplitude')
+  plt.legend()
+  plt.show()
+for i in range(15):#平常時の波形データの確認 (最初の15個を表示)
+  plt.plot(np.linspace(0, 10, 100), normal_data[0], label='h平常時')
+  plt.xlabel('Time (s)')
+  plt.ylabel('Amplitude')
+  plt.legend()
+  plt.show()
+
+np.save('jisin_data.npy', jisin_data)
+np.save('normal_data.npy', normal_data)
