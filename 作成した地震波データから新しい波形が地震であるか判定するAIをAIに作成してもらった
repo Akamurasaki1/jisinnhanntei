@@ -1,0 +1,57 @@
+# prompt: /content/earthquake_data.npyと/content/normal_data.npyのデータからamplitudeのおおきさ（大きければ地震発生時）やまとまり感（規則性がはっきりしていると地震発生時）から学習し、新しい波形が与えられた時にそれが地震中のものか平常時のものか判定するAIを作成し、波形、判定結果、正誤を一覧表示したあと精度を表示する
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+import pandas as pd
+
+# データの読み込み
+jisin_data = np.load('/content/jisin_data.npy')
+normal_data = np.load('/content/normal_data.npy')
+
+# ラベル付け (地震発生時: 1, 平常時: 0)
+jisin_labels = np.ones(len(jisin_data))
+normal_labels = np.zeros(len(normal_data))
+
+# データとラベルを結合
+X = np.concatenate((jisin_data, normal_data), axis=0)
+y = np.concatenate((jisin_labels, normal_labels), axis=0)
+
+# 特徴量エンジニアリング (振幅の最大値と標準偏差を特徴量として追加)
+max_amplitude = np.max(X, axis=1)
+std_amplitude = np.std(X, axis=1)
+X = np.column_stack((X, max_amplitude, std_amplitude))
+
+# データをトレーニングデータとテストデータに分割
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# ランダムフォレスト分類器の学習
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
+
+# テストデータで予測
+y_pred = model.predict(X_test)
+
+# 結果の表示
+results = []
+for i in range(len(X_test)):
+  plt.plot(X_test[i][:100])  # 最初の100個の値を波形として表示
+  plt.xlabel('Time (s)')
+  plt.ylabel('Amplitude')
+  plt.show()
+
+  prediction = '地震発生時' if y_pred[i] == 1 else '平常時'
+  correct = '〇' if y_pred[i] == y_test[i] else '×'
+  results.append([i+1, prediction, correct])
+  print(f"波形 {i+1}: 判定結果: {prediction}, 正誤: {correct}")
+
+
+# 精度の表示
+accuracy = accuracy_score(y_test, y_pred)
+print(f"\n精度: {accuracy:.2f}")
+
+# 結果をDataFrameにして表示
+df_results = pd.DataFrame(results, columns=['波形', '判定結果', '正誤'])
+df_results
