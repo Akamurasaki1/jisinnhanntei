@@ -1,0 +1,54 @@
+# prompt: 地震系の地震波系データからその10秒間に地震が発生しているかを判定するAIを作成
+
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score
+
+# 仮想的な地震波データを作成
+# 実際のデータは、地震計から取得した加速度データなどを使用します。
+def create_synthetic_data(num_samples, window_size=100):
+  """
+  仮想的な地震波データを作成する。
+
+  Args:
+    num_samples: データサンプルの数。
+    window_size: 各データサンプルのサイズ（ここでは、10秒間を100点で表すとする）。
+
+  Returns:
+    X: 特徴量データ (加速度データなど)。
+    y: ラベルデータ（地震が発生しているか否か）。
+  """
+  X = np.random.randn(num_samples, window_size)  # ランダムな加速度データ
+  y = np.random.randint(0, 2, num_samples)  # ランダムなラベル
+
+  # 地震が発生しているデータの一部を人工的に作成
+  for i in range(int(num_samples * 0.2)):
+      start_index = np.random.randint(0, window_size - 20)
+      X[i, start_index:start_index + 20] = X[i, start_index:start_index + 20] * 5
+      y[i] = 1
+
+  return X, y
+
+# データの作成
+X, y = create_synthetic_data(1000)
+
+# データを訓練データとテストデータに分割
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# ランダムフォレストモデルの作成
+model = RandomForestClassifier()
+
+# モデルの訓練
+model.fit(X_train, y_train)
+
+# モデルの評価
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print("Accuracy:", accuracy)
+
+# 新しいデータを入力して地震発生を予測
+new_data = np.random.randn(1, 100)
+prediction = model.predict(new_data)
+print("Prediction:", prediction)  # 1: 地震発生、0: 地震発生なし
+
