@@ -4,21 +4,21 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #地震発生時の波形データを50個作成してリストにする
-jisin_data = []
+jisin_data =[]
 for i in range(50):
   #地震発生時の波形をsinを使用して生成
-  time = np.linspace(0, 10, 100)
-  ampj = np.sin(2 * np.pi * 2 * time) + np.random.normal(0, 0.2, 100)
+  time= np.linspace(0, 10, 100)
+  ampj= np.sin(2*np.pi*2*time)+np.random.normal(0, 0.2, 100)
   jisin_data.append(ampj)
-# print(jisin_data)
+#print(jisin_data)
 #平常時の波形データ(ほぼ平坦なノイズ)を50個作成してリストにする
-normal_data = []
+normal_data= []
 for i in range(50):
   #ほぼ平坦な波形を小さい範囲のランダム値の振幅で生成
-  time = np.linspace(0, 10, 100)
-  amph = np.random.normal(0, 0.1, 100)
+  time= np.linspace(0, 10, 100)
+  amph= np.random.normal(0, 0.1, 100)
   normal_data.append(amph)
- #print(normal_data)
+#print(normal_data)
 for i in range(15):#地震発生時の波形データの確認 (最初の15個を表示)
   plt.plot(np.linspace(0, 10, 100), jisin_data[0], label='j地震発生時')
   plt.xlabel('Time (s)')
