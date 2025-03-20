@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #地震発生時の波形データを50個作成してリストにする
-jisin_data =[]
+jisin_data=　[]
 for i in range(50):
   #地震発生時の波形をsinを使用して生成
   time= np.linspace(0, 10, 100)
