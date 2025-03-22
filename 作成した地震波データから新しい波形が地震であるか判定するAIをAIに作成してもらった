@@ -1,4 +1,4 @@
-# prompt: /content/earthquake_data.npyと/content/normal_data.npyのデータからamplitudeのおおきさ（大きければ地震発生時）やまとまり感（規則性がはっきりしていると地震発生時）から学習し、新しい波形が与えられた時にそれが地震中のものか平常時のものか判定するAIを作成し、波形、判定結果、正誤を一覧表示したあと精度を表示する
+# prompt: /content/jisin_data.npyと/content/normal_data.npyのデータからamplitudeのおおきさ（大きければ地震発生時）やまとまり感（規則性がはっきりしていると地震発生時）から学習し、新しい波形が与えられた時にそれが地震中のものか平常時のものか判定するAIを作成し、波形、判定結果、正誤を一覧表示したあと精度を表示する
 
 import numpy as np
 import matplotlib.pyplot as plt
